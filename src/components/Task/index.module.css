@@ -1,0 +1,34 @@
+.Task {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    box-shadow: 0 4px 4px rgba(0,0,0,.5);
+    margin-bottom: 1rem;
+    padding: .5rem;
+    justify-content: space-between;
+    border-radius: 8px;
+    background-color: wheat;
+}
+
+.Task__text:global.done  {
+    text-decoration: line-through;
+}
+
+.Task__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: orangered;
+    width: 24px;
+    height: 24px;
+    border-radius: 4rem;
+}
+
+.Task__btn:hover {
+    background-color: rgba(0,0,0,.1);
+    
+}
+
+.Task__text:hover, .Task__btn:hover {
+    cursor: pointer;
+}

@@ -1,0 +1,46 @@
+.TaskInput {
+    display: flex;
+    flex-direction: row;
+    gap: .5rem;
+}
+
+.TaskInput input {
+    flex: 1;
+    box-sizing: border-box;
+    font-size: 1rem;
+    padding: .5rem;
+    border: 1px solid #cdcdcd;
+}
+
+.TaskInput input:focus-visible {
+    outline: 1px #0275d8 solid;
+}
+
+.TaskInput__btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #0275d8;
+    color: #fff;
+    padding: .5rem 1rem;
+    transition: all .2s;
+}
+
+.TaskInput__btn span:first-child {
+    margin-right: .5rem;
+}
+
+.TaskInput__btn:hover {
+    cursor: pointer;
+    background-color: rgba(2, 117, 216,.8);
+}
+
+.TaskInput__btn:active {
+    background-color: hsl(208, 98%, 33%);
+    box-shadow: 0 2px 2px rgba(0,0,0,.8);
+}
+
+.TaskInput__btn, .TaskInput input {
+    border-radius: 8px;
+    box-shadow: 0 4px 4px rgba(0,0,0,.5);
+}
