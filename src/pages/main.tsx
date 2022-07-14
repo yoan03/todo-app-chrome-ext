@@ -1,51 +1,81 @@
-import { FC, useState } from 'react';
+import { FC, useState, useEffect } from 'react';
 import styles from './styles/main.module.css';
 import { Task as TaskInterface } from '../ts/interfaces/app.interface';
+import { app, db } from '../firebaseConfig';
+import { getAuth } from 'firebase/auth';
+import { collection, addDoc, onSnapshot, query, where, orderBy, deleteDoc, doc, updateDoc, getDoc } from 'firebase/firestore';
 
 // Components
 import TaskInput from '../components/TaskInput';
 import Task from '../components/Task';
 
-const Main: FC = (props) => {
-    const [counter, setCounter] = useState(0);
+
+type MainProps = {
+    onLogoutClicked: () => void
+};
+
+const Main: FC<MainProps> = (props) => {
     const [tasks, setTasks] = useState<Array<TaskInterface>>([]);
 
+    // Read Task
+    useEffect(() => {
+        const auth = getAuth(app);
+        const q = query(collection(db, "todos"), where("uid", "==", auth.currentUser?.uid), orderBy("timestamp"));
+        onSnapshot(q, querySnapshot => {
+            const tasks: any = [];
+            querySnapshot.forEach(doc => {
+                tasks.push({
+                    id: doc.id,
+                    task: doc.data().task,
+                    done: doc.data().done,
+                    timestamp: doc.data().timestamp
+                });
+            });
+
+            setTasks(tasks)
+            console.log("Tasks found with user: ", JSON.stringify(tasks));
+        });
+    }, []);
+
+
     // Task Handler - to toggle task if clicked
-    const onTaskToggle = (id: string) => {
-        const updatedTask = tasks.map(task => {
-            if (task.id === id) {
-                task.done = !task.done;
-            }
+    const onTaskToggle = async (id: string) => {
+        const docRef = doc(db, 'todos', id);
 
-            return task;
-        })
+        const docSnap = await getDoc(docRef);
 
-        setTasks(updatedTask);
+        if (docRef) {
+            updateDoc(docRef, {
+                done: !docSnap.data()?.done
+            });
+        }
     }
 
     // Task Handler - to delete task if delete btn is clicked
     const onTaskDelete = (id: string) => {
-        const deletedTask = tasks.filter(task => task.id !== id);
+        const docRef = doc(db, 'todos',  id);
 
-        setTasks(deletedTask);
+        if (docRef)
+            deleteDoc(docRef);
     }
 
-    // Task Input Handler - Add task when add btn is click or enter is pressed
-    const onTaskInputAddTask = (task: string) => {
-        const updatedTasks = [...tasks];
-        
-        const newTask: TaskInterface = {
-            id: `task-${counter}`,
-            task,
-            done: false
-        };
+    const onTaskInputAddTask = async (task: string) => {
+        try {
+            const auth = getAuth(app);
+            const uid = auth.currentUser?.uid;
 
-        updatedTasks.push(newTask);
-        setTasks(updatedTasks);
+            const docRef = await addDoc(collection(db, 'todos'), {
+                uid: uid,
+                task: task,
+                done: false,
+                timestamp: new Date()
+            });
 
-        // Increment counter
-        setCounter(count => count + 1);
-    }
+            console.log("Document written with ID: ", docRef.id);
+        } catch (err) {
+            console.error("Error creating new task: ", err);
+        }
+    }   
 
     return (
         <div className={styles.MainPage}>
@@ -61,6 +91,7 @@ const Main: FC = (props) => {
                 There is no Task. <br/> Add a task to complete.
             </div>}
             <TaskInput onAddTask={onTaskInputAddTask}  />
+            <div className={styles.Logout} onClick={props.onLogoutClicked}>Log Out</div>
         </div>
     )
 };

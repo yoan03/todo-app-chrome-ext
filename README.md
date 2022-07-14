@@ -1,6 +1,17 @@
-# ToDo Chrome Extension
+# ToDos Chrome Extension
 
-A todo app chrome extension.
+A todos app chrome extension.
 
-[ ] Add Login with Firebase
-[ ] Persist data for every user on Firebase Database
+To install the app follow the next steps:
+
+1. Go to chrome://extension
+2. Activate developer mode
+3. Press "Load Unpacked"
+4. Select build folder from this repo
+5. Done!
+
+## App Preview:
+
+![Image Preview - 1](media/prev-1.png) 
+
+![Image Preview - 2](media/prev-2.png) 

@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, KeyboardEvent, useState } from 'react';
 import styles from './index.module.css';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -17,9 +17,20 @@ const TaskInput: FC<AppProps> = (props) => {
         setTask('');
     }
 
+    // Verify if enter key was pressed
+    const onKeyEnterDown = (event: KeyboardEvent) => {
+        if (event.key === 'Enter') {
+            onSubmitTaskHandler();
+        }
+    }
+
     return (
         <div className={styles.TaskInput}>
-            <input type="text" value={task} onChange={(e) => setTask(e.target.value)} />
+            <input 
+                type="text" 
+                value={task} 
+                onChange={(e) => setTask(e.target.value)}
+                onKeyDown={onKeyEnterDown} />
             <div className={styles.TaskInput__btn} onClick={onSubmitTaskHandler}>
                 <span>Add Task</span>
                 <FontAwesomeIcon icon={faPlus} />

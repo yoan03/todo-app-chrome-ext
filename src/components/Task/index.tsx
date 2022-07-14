@@ -25,8 +25,8 @@ const Task: FC<AppProps> = (props) => {
 
     return (
         <div className={styles.Task} ref={taskRef}>
-            <div data-type="task-text" className={styles.Task__text} onClick={() => props.onClick(props.id)}>{props.task}</div>
-            <div data-type="delete-btn" className={styles.Task__btn} onClick={() => props.onDelete(props.id)}>
+            <div data-type="task-text" className={styles.Task__text} onClick={() => props.onClick(props.id!)}>{props.task}</div>
+            <div data-type="delete-btn" className={styles.Task__btn} onClick={() => props.onDelete(props.id!)}>
                 <FontAwesomeIcon icon={faTrash} />
             </div>
         </div>
